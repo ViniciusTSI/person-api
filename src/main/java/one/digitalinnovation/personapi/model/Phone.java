@@ -2,6 +2,7 @@ package one.digitalinnovation.personapi.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import one.digitalinnovation.personapi.enums.PhoneType;
 
 import javax.persistence.*;
 
