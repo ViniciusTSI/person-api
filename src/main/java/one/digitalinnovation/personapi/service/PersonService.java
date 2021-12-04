@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,11 +29,10 @@ public class PersonService {
     }
 
     public PersonDTO findById(Long id) throws PersonNotFoundException {
-        Optional<Person> person = personRepository.findById(id);
-        if (person.isEmpty()) {
-            throw new PersonNotFoundException(id);
-        }
-        return personMapper.toDTO(person.get());
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
+
+        return personMapper.toDTO(person);
     }
 
     public List<PersonDTO> listAll() {
@@ -45,24 +43,20 @@ public class PersonService {
     }
 
     public MessageResponseDTO update(Long id, PersonDTO personDTO) throws PersonNotFoundException {
-        Optional<Person> person = personRepository.findById(id);
-        if (person.isEmpty()) {
-            throw new PersonNotFoundException(id);
-        }
+        personRepository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
+
         Person updatedPerson = personMapper.toModel(personDTO);
         Person savedPerson = personRepository.save(updatedPerson);
 
         return createMessageResponse("Person successfully updated with ID ", savedPerson.getId());
     }
 
-    public MessageResponseDTO delete(Long id) throws PersonNotFoundException {
-        Optional<Person> person = personRepository.findById(id);
-        if (person.isEmpty()) {
-            throw new PersonNotFoundException(id);
-        }
-        personRepository.deleteById(id);
+    public void delete(Long id) throws PersonNotFoundException {
+        personRepository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
 
-        return createMessageResponse("Person successfully deleted with ID ", id);
+        personRepository.deleteById(id);
     }
 
     private MessageResponseDTO createMessageResponse(String s, Long id2) {
