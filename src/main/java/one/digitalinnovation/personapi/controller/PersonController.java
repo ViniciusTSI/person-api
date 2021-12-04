@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController("/api/v1/people")
+@RestController
+@RequestMapping("/api/v1/people")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class PersonController {
 
@@ -26,7 +27,7 @@ public class PersonController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDTO findById(Long id) throws PersonNotFoundException {
+    public PersonDTO findById(@PathVariable Long id) throws PersonNotFoundException {
         return personService.findById(id);
     }
 
@@ -35,15 +36,15 @@ public class PersonController {
         return personService.listAll();
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponseDTO update(Long id, @RequestBody @Valid PersonDTO personDTO) throws PersonNotFoundException {
+    public MessageResponseDTO update(@PathVariable Long id, @RequestBody @Valid PersonDTO personDTO) throws PersonNotFoundException {
         return personService.update(id, personDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public MessageResponseDTO delete(Long id) throws PersonNotFoundException {
+    public MessageResponseDTO delete(@PathVariable Long id) throws PersonNotFoundException {
         return personService.delete(id);
     }
 

@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -42,7 +41,7 @@ public class PersonService {
         List<Person> people = personRepository.findAll();
         return people.stream()
                 .map(personMapper::toDTO)
-                .collect(toList());
+                .collect(Collectors.toList());
     }
 
     public MessageResponseDTO update(Long id, PersonDTO personDTO) throws PersonNotFoundException {
